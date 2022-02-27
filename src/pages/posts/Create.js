@@ -7,16 +7,50 @@ const Create = () => {
     title: "",
     content: "",
   });
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [error, setError] = useState({});
-
   const { title, content } = newPost;
-
   const { push } = useRouter();
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {};
+  const validate = () => {
+    let errors = {};
+    if (!title) {
+      errors.title = "Title is required";
+    }
+    if (!content) {
+      errors.content = "Content is required";
+    }
+    return errors;
+  };
 
-  const handleChange = (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let errors = validate();
+
+    if (Object.keys(errors).length) return setErrors(errors);
+    setIsSubmit(true);
+    await createPost();
+    await push("/");
+  };
+
+  const createPost = async () => {
+    try {
+      await fetch(" http://localhost:3000/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPost),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewPost({ ...newPost, [name]: value });
+  };
 
   return (
     <Grid

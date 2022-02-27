@@ -3,8 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function Home({ posts = [] }) {
-  const router = useRouter();
-
   if (posts.length === 0) {
     return (
       <Grid
@@ -17,7 +15,7 @@ export default function Home({ posts = [] }) {
           <Grid.Column textAlign="center">
             <h1>No posts yet</h1>
             <div>
-              <Button primary onClick={() => router.push("/posts/new")}>
+              <Button primary onClick={() => router.push("/posts/create'")}>
                 Create Post
               </Button>
             </div>

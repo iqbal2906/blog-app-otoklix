@@ -14,7 +14,7 @@ export const Navbar = () => {
       <Container>
         <Menu.Item name="home">
           <Link href="/">
-            <img src="/Hatena.svg" />
+            <img style={{"cursor":"pointer"}} src="/Hatena.svg" />
           </Link>
         </Menu.Item>
         <Menu.Menu position="right">
@@ -22,7 +22,7 @@ export const Navbar = () => {
             <Button
               size="mini"
               primary
-              onClick={() => router.push("/posts/new")}
+              onClick={() => router.push("/posts/create")}
             >
               New Post
             </Button>

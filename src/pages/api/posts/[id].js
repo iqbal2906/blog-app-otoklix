@@ -1,4 +1,4 @@
-import Post from "../../model/Post";
+import Post from "../../../model/Post";
 import { dbConnect, runMiddleware } from "../../../utils/index";
 import Morgan from "morgan";
 
@@ -45,5 +45,7 @@ export default async (req, res) => {
       } catch (err) {
         return res.status(400).json({ msg: err.message });
       }
+    default:
+      return res.status(400).json({ msg: "This method is not supported" });
   }
 };

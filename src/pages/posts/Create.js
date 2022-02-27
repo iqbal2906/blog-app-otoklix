@@ -69,6 +69,9 @@ const Create = () => {
               ) : (
                 <Form onSubmit={handleSubmit}>
                   <Form.Input
+                    error={
+                      errors.title ? { content: "Title cannot be empty" } : null
+                    }
                     placeholder="Title"
                     name="title"
                     onChange={handleChange}
@@ -76,6 +79,9 @@ const Create = () => {
                     autoFocus
                   />
                   <Form.TextArea
+                  error={
+                    errors.content ? { content: "Content cannot be empty" } : null
+                  }
                     placeholder="Content"
                     name="content"
                     onChange={handleChange}

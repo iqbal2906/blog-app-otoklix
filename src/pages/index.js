@@ -1,8 +1,11 @@
 import { Button, Card, Container, Grid } from "semantic-ui-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Moment from "moment";
 
 export default function Home({ posts = [] }) {
+  const router = useRouter();
+
   if (posts.length === 0) {
     return (
       <Grid
@@ -38,6 +41,9 @@ export default function Home({ posts = [] }) {
                   </Link>
                 </Card.Header>
                 <p>{post.content}</p>
+                <p style={{ fontSize: "11px" }}>
+                  {Moment(post.published_at).format("LLL")}
+                </p>
               </Card.Content>
               <Card.Content extra>
                 <Button

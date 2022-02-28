@@ -6,11 +6,22 @@ const Create = () => {
   const [newPost, setNewPost] = useState({
     title: "",
     content: "",
+    published_at: new Date()
   });
   const { title, content } = newPost;
-  const { push } = useRouter();
+  const { push, query } = useRouter();
   const [isSubmit, setIsSubmit] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const getPost = async () => {
+    const response = await fetch(`http://localhost:3000/api/posts/${query.id}`);
+    const data = await response.json();
+    setNewPost({ title: data.title, content: data.content, published_at: data.updatedAt });
+  };
+
+  useEffect(() => {
+    if (query.id) getPost();
+  }, [query.id]);
 
   const validate = () => {
     let errors = {};
@@ -29,7 +40,11 @@ const Create = () => {
 
     if (Object.keys(errors).length) return setErrors(errors);
     setIsSubmit(true);
-    await createPost();
+    if (query.id) {
+      await updatePost();
+    } else {
+      await createPost();
+    }
     await push("/");
   };
 
@@ -37,6 +52,20 @@ const Create = () => {
     try {
       await fetch(" http://localhost:3000/api/posts", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPost),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updatePost = async () => {
+    try {
+      await fetch(`http://localhost:3000/api/posts/${query.id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,7 +91,7 @@ const Create = () => {
       <Grid.Row>
         <Grid.Column textAlign="center">
           <div>
-            <h1>Create Post</h1>
+            <h1>{query.id ? "Update Post" : "Create Post"}</h1>
             <div>
               {isSubmit ? (
                 <Loader active inline="centered" />
@@ -79,16 +108,18 @@ const Create = () => {
                     autoFocus
                   />
                   <Form.TextArea
-                  error={
-                    errors.content ? { content: "Content cannot be empty" } : null
-                  }
+                    error={
+                      errors.content
+                        ? { content: "Content cannot be empty" }
+                        : null
+                    }
                     placeholder="Content"
                     name="content"
                     onChange={handleChange}
                     value={content}
                   />
                   <Button type="submit" primary>
-                    Submit
+                    {query.id ? "Update" : "Submit"}
                   </Button>
                 </Form>
               )}
